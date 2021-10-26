@@ -1,4 +1,13 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-
-createApp(App).mount('#app')
+import { createApp } from "vue";
+import router from "./router";
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "fontawesome";
+import App from "./App.vue";
+import { store } from "./store";
+const app = createApp(App);
+app.use(store);
+app.use(router);
+// app.config.compilerOptions.isCustomElement = (tag) => tag === "is";
+// app.config.compilerOptions.isCustomElement = (tag) => tag === "notes";
+app.mount("#app");
