@@ -1,29 +1,79 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import Tasks from "./components/todos/TodoItems.vue";
 import Dashboard from "./components/Dashboard.vue";
 import NotFound from "./components/NotFound.vue";
-import NotesView from "../views/Notes.vue";
-import NoteEdit from "./components/notes/NoteAddEdit.vue";
-
+import Notes from "../views/Notes.vue";
+import TaskAddEdit from "../views/AddEditNote.vue";
+//import { store } from "./store";
+import NavbarComponent from "./components/navigation/Navbar.vue";
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
-    { path: "/dashboard", component: Dashboard },
-    { path: "/tasks", component: Tasks },
+    {
+      path: "/tasksToDoVue",
+      components: {
+        default: Dashboard,
+        Navbar: NavbarComponent,
+      },
+      children: {},
+    },
+    {
+      path: "/",
+      redirect: "/dashboard",
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      components: {
+        default: Dashboard,
+        Navbar: NavbarComponent,
+      },
+      alias: "/home",
+    },
+    {
+      path: "/tasks",
+      name: "tasks",
+      components: {
+        default: Tasks,
+        Navbar: NavbarComponent,
+      },
+    },
     {
       path: "/notes",
-      component: NotesView,
+      name: "notes",
+      components: {
+        default: Notes,
+        Navbar: NavbarComponent,
+      },
       children: [
-        { path: "new", component: NoteEdit },
-        { path: "edit/:id", component: NoteEdit },
+        { path: "new", name: "newnote", component: TaskAddEdit },
+        {
+          meta: {
+            redirectRouteName: "notes",
+          },
+
+          name: "editnote",
+          path: "edit/:id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})?",
+          component: TaskAddEdit,
+          props: (route) => ({ id: route.params.id }),
+        },
       ],
     },
-    { path: "/", component: Dashboard },
-    { path: "/:pathMatch(.*)", component: NotFound },
+    { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFound },
   ],
   linkActiveClass: "active text-info",
   linkExactActiveClass: "active",
+  scrollBehavior(to, from, savedposition) {
+    console.log("to", to);
+    console.log("from", from);
+    console.log("saved Position", savedposition);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(savedposition || { left: 0, top: 0 });
+      }, 500);
+    });
+  },
 });
 
 export default router;

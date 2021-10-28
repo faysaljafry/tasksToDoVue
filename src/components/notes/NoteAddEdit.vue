@@ -72,7 +72,10 @@ export default {
   name: "NoteAddEdit",
   components: {},
   props: {
-    value: Object,
+    id: {
+      note: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -81,25 +84,14 @@ export default {
     };
   },
   mounted() {},
+  watch: {
+    id() {
+      this.initializeNote();
+    },
+  },
   created() {
-    let noteId = this.$route.params.id;
-    if (noteId) {
-      let existingNote = this.$store.getters.allNotes.find(
-        (z) => z.id == noteId
-      );
-      this.note = existingNote;
-    } else {
-      this.note = this.value || {
-        id: null,
-        title: "",
-        note: "",
-        createdOn: new Date().toLocaleDateString(),
-        done: false,
-        labels: [],
-      };
-      this.labelIds =
-        (this.note.labels && this.note.labels.map((z) => z.id)) || [];
-    }
+    console.log("The note is created!");
+    this.initializeNote();
   },
   methods: {
     onSubmit(event) {
@@ -111,6 +103,27 @@ export default {
       );
       this.$store.commit("saveNote", this.note);
       this.$emit("close");
+    },
+    initializeNote() {
+      console.log("The note is created!");
+      let noteId = this.id;
+      if (noteId) {
+        let existingNote = this.$store.getters.allNotes.find(
+          (z) => z.id == noteId
+        );
+        this.note = existingNote;
+      } else {
+        this.note = this.value || {
+          id: null,
+          title: "",
+          note: "",
+          createdOn: new Date().toLocaleDateString(),
+          done: false,
+          labels: [],
+        };
+        this.labelIds =
+          (this.note.labels && this.note.labels.map((z) => z.id)) || [];
+      }
     },
   },
 };

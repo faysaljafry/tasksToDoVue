@@ -15,11 +15,15 @@ function uuidv4() {
 export const store = createStore({
   plugins: [vuexPersist.plugin],
   state: {
+    startScreen: "home",
     tasks: [],
     notes: [],
     labels: [],
   },
   getters: {
+    startScreen(state) {
+      return state.startScreen;
+    },
     allNotes(state) {
       return state.notes;
     },
@@ -37,6 +41,112 @@ export const store = createStore({
     },
   },
   mutations: {
+    setInitialdata(state) {
+      console.log("In the Mutation");
+      vuexPersist.storage.setItem(
+        "vue-router-course",
+        JSON.stringify({
+          startScreen: "",
+          tasks: [
+            {
+              id: "5d7f2785-b5ca-420d-8a02-bfc4bad41068",
+              note: "Repellendus Ut atqu",
+              title: "Laboriosam dolorem ",
+              createdOn: "10/27/2021",
+              done: true,
+            },
+          ],
+          notes: [
+            {
+              id: "81d8439c-d480-40fd-b32f-5c7f139b9303",
+              title: "Amet dignissimos ex",
+              note: "Animi dolorem quisq",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "77eac5c2-7c39-478b-a00f-6cf4f495028e",
+              title: "Et similique qui aut",
+              note: "Irure magna minus do",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "81d8439c-d480-40fd-b32f-5c7f139b9303",
+              title: "Amet dignissimos ex",
+              note: "Animi dolorem quisq",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "77eac5c2-7c39-478b-a00f-6cf4f495028e",
+              title: "Et similique qui aut",
+              note: "Irure magna minus do",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "81d8439c-d480-40fd-b32f-5c7f139b9303",
+              title: "Amet dignissimos ex",
+              note: "Animi dolorem quisq",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "77eac5c2-7c39-478b-a00f-6cf4f495028e",
+              title: "Et similique qui aut",
+              note: "Irure magna minus do",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "81d8439c-d480-40fd-b32f-5c7f139b9303",
+              title: "Amet dignissimos ex",
+              note: "Animi dolorem quisq",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+            {
+              id: "77eac5c2-7c39-478b-a00f-6cf4f495028e",
+              title: "Et similique qui aut",
+              note: "Irure magna minus do",
+              createdOn: "10/27/2021",
+              done: false,
+              labels: [],
+            },
+          ],
+          labels: [
+            {
+              id: "81b6df55-9b1c-4120-a042-c7d934c85cb4",
+              title: "Label 1",
+              color: "",
+            },
+            {
+              id: "957cc27e-a181-428a-be16-81873ce58d80",
+              title: "Label 2",
+              color: "",
+            },
+          ],
+          key: "Dummy key",
+        })
+      );
+      let data = JSON.parse(vuexPersist.storage.getItem("vue-router-course"));
+      console.log(data);
+      state.startScreen = data.startScreen;
+      state.notes = data.notes;
+      state.tasks = data.tasks;
+      state.labels = data.labels;
+    },
+    startScreen(state, value) {
+      state.startScreen = value;
+    },
     saveLabel(state, label) {
       if (label.id) {
         let existingLabelIndex = state.labels.findIndex(
